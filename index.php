@@ -4,6 +4,16 @@
 	ini_set('display errors','on');
 	error_reporting(E_ALL);
 
+	//Class to load  classes it finds the file when the program starts to fail for calling a missing class
+	class Manage {
+		public static function autoload($class){
+			include $class . 'php';
+		}
+	}
+
+	spl_autoload_register(array('Manage','autoload'));
+
+
 	$obj = new main();
 
 	class main {
@@ -43,7 +53,7 @@
 		    try {
 					$q = $conn->prepare($query);
 					$q->execute();
-					$results = $q->fetchAll();
+					$results = $q->fetchAll(PDO::FETCH_ASSOC);
 					$q->closeCursor(); 
 					return $results;	
 
@@ -57,40 +67,14 @@
 
 			$sqlQuery = "select * from accounts $condition";
 			$results = runQueries::runQuery($sqlQuery,$conn);
-			print_r($results);
-			$htmlBuilder = new displayTable();
-			$htmlBuilder->createTable($results);
-
+			$tbLObj = new displayTable();
+			$tableCreated = $tbLObj->createTable($results);
 		}
 
 
 	}
 
-
-	class displayTable extends htmlBuilder{
-
-		public function createTable($results){
-
-			echo "Inside display";
-
-			$createData .= '<tr>';
-			foreach($results as $rows){
-				foreach($rows as $values){
-					$createData .= '<td>' . $values . '</td>';
-				}
- 
-				$createData .= '</tr>';
-
-			} 
-
-			$this->html .= $createData;
-
-		}
-
-
-	}
-
-
+/*
 	abstract class htmlBuilder{		
 		protected $html;
 
@@ -105,7 +89,43 @@
 			print($this->html);
 		}
 
+	}*/
+
+
+	class displayTable{
+		protected $html;
+		public function __construct(){
+			$this->html .= '<html><body><table border="1">';
+		}
+
+		public function createTable($results){
+
+
+			$createData .= '<tr>';
+			foreach($results as $rows){
+				foreach($rows as $values){
+					$createData .= '<td>' . $values . '</td>';
+				}
+ 
+				$createData .= '</tr>';
+
+			} 
+
+			$this->html.= $createData;
+
+		}
+		
+
+		public function __destruct(){
+			$this->html .= '</table></body></html>';
+			print_r($this->html);
+		}
+
+
+
 	}
+
+
 
 
 
