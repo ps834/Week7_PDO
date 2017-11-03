@@ -1,5 +1,8 @@
 <?php
-//ini_set('display_errors')
+
+	//turn on debugging message
+	ini_set('display errors','on');
+	error_reporting(E_ALL);
 
 	$obj = new main();
 
@@ -31,8 +34,7 @@
 
 
 
-	class runQueries
-	{
+	class runQueries{
 
 
 		static function runQuery($query,$conn) {
@@ -42,7 +44,6 @@
 					$q = $conn->prepare($query);
 					$q->execute();
 					$results = $q->fetchAll();
-					echo "fetch!!";
 					$q->closeCursor(); 
 					return $results;	
 
@@ -57,8 +58,8 @@
 			$sqlQuery = "select * from accounts $condition";
 			$results = runQueries::runQuery($sqlQuery,$conn);
 			print_r($results);
-			$display = new displayResults();
-			$display->displayTable();
+			$htmlBuilder = new displayTable();
+			$htmlBuilder->createTable($results);
 
 		}
 
@@ -66,18 +67,23 @@
 	}
 
 
-	class displayResults{
+	class displayTable extends htmlBuilder{
 
-		function displayTable($results){
+		public function createTable($results){
 
-			$this->html .= '<tr>';
+			echo "Inside display";
+
+			$createData .= '<tr>';
 			foreach($results as $rows){
 				foreach($rows as $values){
-
+					$createData .= '<td>' . $values . '</td>';
 				}
+ 
+				$createData .= '</tr>';
+
 			} 
 
-
+			$this->html .= $createData;
 
 		}
 
@@ -85,18 +91,18 @@
 	}
 
 
-	abtract class html{
-
+	abstract class htmlBuilder{		
 		protected $html;
 
 		public function __construct(){
-
-			$this->html = '<html><body><table>';
+			echo "SOC";
+			$this->html .= '<html><body><table>';
 		}
 
 		public function __destruct(){
-
+			echo 'EOD';
 			$this->html .= '</table></body></html>';
+			print($this->html);
 		}
 
 	}
