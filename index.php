@@ -27,7 +27,7 @@
 			$conn = NULL;
 		try{				
 				$conn = new PDO("mysql:host=$hostname;dbname=ps834",$username,$pwd);
-				echo "Connected successfully <br>";
+				echo " <b>Connected successfully</b> <br>";
 				$condition = "where id < 6";
 				$obj1 = new runQueries();
 				$obj1->selectQuery($conn,$condition);
@@ -67,42 +67,12 @@
 
 			$sqlQuery = "select * from accounts $condition";
 			$results = runQueries::runQuery($sqlQuery,$conn);
-			$tbLObj = new processResults();
-			//$tbLObj->createTable($results);
 			processResults::countArray($results);
+			processResults::createTable($results);
 		}
 
 
 	}
-
-
-	abstract class buildHTML{
-
-		protected $html;
-
-		//Open HTML 
-		public function __construct(){
-
-			echo "SOC";
-
-			//$this->html .= '<html><body><table>';
-		}
-
-		//Closing HTML 
-		public function __destruct(){
-        	
-
-        	echo "destruct";
-        	//$this->html .= '</table></body></html>';
-
-        	//printing the results appended to HTML 
-        	//print($this->html);
-
-    	}
-
-
-	}
-
 
 
 	class processResults extends buildHTML{
@@ -110,10 +80,10 @@
 
 		protected $html;
 		public function __construct(){
-			$this->html .= '<html><body><table border="1" align = "center">';
+			$this->html .= '<html><title>PDO Connection</title><body><table border="1" align = "center">';
 		}
 
-		public function createTable($results){
+		static function createTable($results){
 
 
 			$createData = '<tr>';
@@ -132,10 +102,9 @@
 
 		static function countArray($results){
 
-			print("The No. of Rows returned is " . sizeof($results));
+			print("The No. of Rows returned is " . sizeof($results) . "<br>");
 
 		}
-		
 		
 
 		public function __destruct(){
