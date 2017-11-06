@@ -27,7 +27,7 @@
 			$conn = NULL;
 		try{				
 				$conn = new PDO("mysql:host=$hostname;dbname=ps834",$username,$pwd);
-				echo "Connected successfully ";
+				echo "Connected successfully <br>";
 				$condition = "where id < 6";
 				$obj1 = new runQueries();
 				$obj1->selectQuery($conn,$condition);
@@ -67,41 +67,56 @@
 
 			$sqlQuery = "select * from accounts $condition";
 			$results = runQueries::runQuery($sqlQuery,$conn);
-			$tbLObj = new displayTable();
-			$tableCreated = $tbLObj->createTable($results);
+			$tbLObj = new processResults();
+			//$tbLObj->createTable($results);
+			processResults::countArray($results);
 		}
 
 
 	}
 
-/*
-	abstract class htmlBuilder{		
+
+	abstract class buildHTML{
+
 		protected $html;
 
+		//Open HTML 
 		public function __construct(){
+
 			echo "SOC";
-			$this->html .= '<html><body><table>';
+
+			//$this->html .= '<html><body><table>';
 		}
 
+		//Closing HTML 
 		public function __destruct(){
-			echo 'EOD';
-			$this->html .= '</table></body></html>';
-			print($this->html);
-		}
+        	
 
-	}*/
+        	echo "destruct";
+        	//$this->html .= '</table></body></html>';
+
+        	//printing the results appended to HTML 
+        	//print($this->html);
+
+    	}
 
 
-	class displayTable{
+	}
+
+
+
+	class processResults extends buildHTML{
+
+
 		protected $html;
 		public function __construct(){
-			$this->html .= '<html><body><table border="1">';
+			$this->html .= '<html><body><table border="1" align = "center">';
 		}
 
 		public function createTable($results){
 
 
-			$createData .= '<tr>';
+			$createData = '<tr>';
 			foreach($results as $rows){
 				foreach($rows as $values){
 					$createData .= '<td>' . $values . '</td>';
@@ -114,6 +129,13 @@
 			$this->html.= $createData;
 
 		}
+
+		static function countArray($results){
+
+			print("The No. of Rows returned is " . sizeof($results));
+
+		}
+		
 		
 
 		public function __destruct(){
