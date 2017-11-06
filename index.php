@@ -1,3 +1,4 @@
+
 <?php
 
 	//turn on debugging message
@@ -15,6 +16,7 @@
 
 
 	$obj = new main();
+
 	class main{
 
 		protected $html;
@@ -37,6 +39,18 @@
 
 				printStrings::printText("Error while connecting to the database : " . $e->getMessage());
 			}
+		}
+
+
+		
+		public function executeProgram($conn,$query){
+
+				$results = runQueries::runQuery($conn,$query);
+				$createData = processResults::createTable($results);
+				$countValue = processResults::countArray($results);
+				printStrings::printText($countValue);
+				$this->html .= $createData;
+
 		}
 
 
@@ -74,6 +88,7 @@
 	}
 
 
+
 	class processResults{
 
 		
@@ -102,39 +117,6 @@
 	}
 
 
-
-	//Class to create HTML tags
-	class htmlLayout{
-
-
-		//To Start the HTML 
-		static function startHTML(){
-
-			return '<html><body><title>PDO Connection</title>';
-		}
-
-		//To start table
-		static function startTable(){
-
-			return '<table border="1" align = "center">';   
-		}
-
-		//To end Table
-		static function endTable(){
-
-			return '</table>';
-		}
-
-		//To End the HTML 
-		static function endHTML(){
-
-			return '</body></html>';
-		}
-}	
-		
-
-
-
 class printStrings{
 
 
@@ -145,8 +127,19 @@ class printStrings{
 }
 
 
+class htmlLayout{
 
 
+	static function startHTML(){
 
+		return '<html><body><title>PDO Connection</title><table border="1" align = "center">';
+	}
+
+
+	static function endHTML(){
+
+		return '</table></body></html>';
+	}
+}
 
 ?>
