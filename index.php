@@ -74,15 +74,13 @@
 	}
 
 
-
-
 	class processResults{
 
+		
+		static function createTable($results){
 
-		public function createTable($results){
 
-
-			$createData = '<tr>';
+			$createData = '<tr>'; 
 			foreach($results as $rows){
 				foreach($rows as $values){
 					$createData .= '<td>' . $values . '</td>';
@@ -91,19 +89,18 @@
 				$createData .= '</tr>';
 
 			} 
-
-			$this->html .= $createData;
-
+			return $createData;
 		}
 
 		static function countArray($results){
 
-			print("The No. of Rows returned is " . sizeof($results) . "<br>");
+			$text = "The No. of Rows returned is " . sizeof($results) . "<br>";
+			return $text;
 
 		}
-
-
+		
 	}
+
 
 
 	//Class to create HTML tags
@@ -137,6 +134,15 @@
 		
 
 
+
+class printStrings{
+
+
+	static function printText($text){
+
+			print($text);
+	}
+}
 
 
 
