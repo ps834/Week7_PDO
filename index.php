@@ -21,43 +21,75 @@
 
 		protected $html;
 
+
+		//Opening PDO Connection and calling Execute Program
 		public function __construct(){
 
+			//Set Connection Parameters
 			$hostname = "sql1.njit.edu";
 			$username = "ps834";
 			$pwd = "q1ZT9FnRO";
-			$this->html = htmlLayout::startHTML();
 
-		try{				
+			//Create Table
+			$this->html = htmlLayout::startHTML();
+			$this->html = htmlLayout::startTable();
+
+		try{		
+
+				//Connection to Database		
 				$conn = new PDO("mysql:host=$hostname;dbname=ps834",$username,$pwd);
 				printStrings::printText("<b>Connected successfully</b> <br>");
+
+
+				//Set the condition as and when needed else set is as empty string 
 				$condition = "where id < 6";
+
+				//Set Query
 				$query="select * from accounts $condition";
+
+				//Executing the Program
 				$this::executeProgram($conn,$query);
 
 			}catch(PDOException $e){
 
+				//Print Database Connection Error
 				printStrings::printText("Error while connecting to the database : " . $e->getMessage());
 			}
 		}
 
 
-		
+		//Funtion to call different methods
 		public function executeProgram($conn,$query){
+
+
 
 				$results = runQueries::runQuery($conn,$query);
 				$createData = processResults::createTable($results);
 				$countValue = processResults::countArray($results);
 				printStrings::printText($countValue);
 				$this->html .= $createData;
+				
 
+		}
+
+
+		//Close Connection
+		static function closeConnection($conn){
+
+			$conn.close();
 		}
 
 
 		public function __destruct(){
 
+			//End Table
+			$this->html .=  htmlLayout::endTable();
 			$this->html .=  htmlLayout::endHTML();
-			die($this->html);
+
+			//Print Program output
+			printStrings::printText($this->html);
+
+			$this::closeConnection($conn);
 		}
 
 		
@@ -69,6 +101,8 @@
 	class runQueries{
 
 
+
+		//This will execute the query passed and return the resultset
 		static function runQuery($conn,$query) {
 
 
@@ -92,6 +126,8 @@
 	class processResults{
 
 		
+
+		//Function to Create Table Data as per the result set passed
 		static function createTable($results){
 
 
@@ -107,6 +143,7 @@
 			return $createData;
 		}
 
+		//Function to count the number of data in the result set
 		static function countArray($results){
 
 			$text = "The No. of Rows returned is " . sizeof($results) . "<br>";
@@ -117,9 +154,11 @@
 	}
 
 
+
+
 class printStrings{
 
-
+	//This will print all the String passed to it
 	static function printText($text){
 
 			print($text);
@@ -130,16 +169,33 @@ class printStrings{
 class htmlLayout{
 
 
+	//Start HTML
 	static function startHTML(){
 
-		return '<html><body><title>PDO Connection</title><table border="1" align = "center">';
+		return '<html><body><title>PDO Connection</title>';
 	}
 
 
+	//Start Table
+	static function startTable(){
+
+		return '<table border="1" align = "center">';
+	}
+
+
+	//End Table
+	static function endTable(){
+
+		return '</table>';
+
+	}
+
+	//End HTML
 	static function endHTML(){
 
-		return '</table></body></html>';
+		return '</body></html>';
 	}
+
 }
 
 ?>
