@@ -55,10 +55,11 @@
 	class runQueries{
 
 
-		static function runQuery($query,$conn) {
+		static function runQuery($conn,$query) {
 
 
 		    try {
+		    	
 					$q = $conn->prepare($query);
 					$q->execute();
 					$results = $q->fetchAll(PDO::FETCH_ASSOC);
@@ -70,19 +71,9 @@
 			}	  
 		}
 
-
-		 public function selectQuery($conn,$condition){
-
-			$sqlQuery = "select * from accounts $condition";
-			$results = runQueries::runQuery($sqlQuery,$conn);
-			processResults::countArray($results);
-			$tableObj = new processResults();
-			$tableObj->createTable($results);
-
-		}
-
-
 	}
+
+
 
 
 	class processResults{
