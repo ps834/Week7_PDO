@@ -68,22 +68,24 @@
 			$sqlQuery = "select * from accounts $condition";
 			$results = runQueries::runQuery($sqlQuery,$conn);
 			processResults::countArray($results);
-			processResults::createTable($results);
+			$tableObj = new processResults();
+			$tableObj->createTable($results);
+
 		}
 
 
 	}
 
 
-	class processResults extends buildHTML{
+	class processResults{
 
 
 		protected $html;
 		public function __construct(){
-			$this->html .= '<html><title>PDO Connection</title><body><table border="1" align = "center">';
+			$this->html .= '<html><title>PDO Connection</title><body> <h4><center>The following table consists data with ID less than 6</center></h4> <table border="1" align = "center"><br>';
 		}
 
-		static function createTable($results){
+		public function createTable($results){
 
 
 			$createData = '<tr>';
@@ -96,7 +98,7 @@
 
 			} 
 
-			$this->html.= $createData;
+			$this->html .= $createData;
 
 		}
 
@@ -109,7 +111,7 @@
 
 		public function __destruct(){
 			$this->html .= '</table></body></html>';
-			print_r($this->html);
+			die($this->html);
 		}
 
 
