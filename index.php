@@ -15,28 +15,35 @@
 
 
 	$obj = new main();
+	class main{
 
-	class main {
-
+		protected $html;
 
 		public function __construct(){
 
 			$hostname = "sql1.njit.edu";
 			$username = "ps834";
 			$pwd = "q1ZT9FnRO";
-			$conn = NULL;
+			$this->html = htmlLayout::startHTML();
+
 		try{				
 				$conn = new PDO("mysql:host=$hostname;dbname=ps834",$username,$pwd);
-				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-				echo " <b>Connected successfully</b> <br>";
+				printStrings::printText("<b>Connected successfully</b> <br>");
 				$condition = "where id < 6";
-				$obj1 = new runQueries();
-				$obj1->selectQuery($conn,$condition);
+				$query="select * from accounts $condition";
+				$this::executeProgram($conn,$query);
 
 			}catch(PDOException $e){
 
-				echo "Error while connecting to the database : " . $e->getMessage();
+				printStrings::printText("Error while connecting to the database : " . $e->getMessage());
 			}
+		}
+
+
+		public function __destruct(){
+
+			$this->html .=  htmlLayout::endHTML();
+			die($this->html);
 		}
 
 		
@@ -81,11 +88,6 @@
 	class processResults{
 
 
-		protected $html;
-		public function __construct(){
-			$this->html .= '<html><title>PDO Connection</title><body> <h4><center>The following table consists data with ID less than 6</center></h4> <table border="1" align = "center"><br>';
-		}
-
 		public function createTable($results){
 
 
@@ -108,13 +110,6 @@
 			print("The No. of Rows returned is " . sizeof($results) . "<br>");
 
 		}
-		
-
-		public function __destruct(){
-			$this->html .= '</table></body></html>';
-			die($this->html);
-		}
-
 
 
 	}
