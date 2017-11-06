@@ -27,6 +27,7 @@
 			$conn = NULL;
 		try{				
 				$conn = new PDO("mysql:host=$hostname;dbname=ps834",$username,$pwd);
+				$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 				echo " <b>Connected successfully</b> <br>";
 				$condition = "where id < 6";
 				$obj1 = new runQueries();
@@ -34,7 +35,7 @@
 
 			}catch(PDOException $e){
 
-				echo "Error";
+				echo "Error while connecting to the database : " . $e->getMessage();
 			}
 		}
 
@@ -117,6 +118,39 @@
 
 
 	}
+
+
+	//Class to create HTML tags
+	class htmlLayout{
+
+
+		//To Start the HTML 
+		static function startHTML(){
+
+			return '<html><body><title>PDO Connection</title>';
+		}
+
+		//To start table
+		static function startTable(){
+
+			return '<table border="1" align = "center">';   
+		}
+
+		//To end Table
+		static function endTable(){
+
+			return '</table>';
+		}
+
+		//To End the HTML 
+		static function endHTML(){
+
+			return '</body></html>';
+		}
+}	
+		
+
+
 
 
 
