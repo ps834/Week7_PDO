@@ -138,9 +138,6 @@
 					$q = $conn->prepare($query);
 					$q->execute();
 					$results = $q->fetchAll(PDO::FETCH_ASSOC);
-					/*$link = mysql_connect('sql1.njit.edu', 'ps834', 'q1ZT9FnRO');
-					$res = mysql_query($query, $link);*/
-/*					echo mysql_data_seek($result, 0);*/
 					$q->closeCursor(); 
 					return $results;	
 
